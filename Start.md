@@ -9,3 +9,8 @@
 |结构|写时模式|读时模式|
 |完整性|高|低|
 |横向扩展|非线性的|线性的|
+
+## MapReduce数据流范例
+input | --> map   | --> shuffle | --> reduce    --> output   
+cat * | --> map.rb| --> sort    | --> reduce.rb --> output  
+
