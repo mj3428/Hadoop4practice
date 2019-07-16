@@ -13,4 +13,4 @@
 ## MapReduce数据流范例
 input | --> map   | --> shuffle | --> reduce    --> output   
 cat * | --> map.rb| --> sort    | --> reduce.rb --> output  
-
+下面是Unix管线
