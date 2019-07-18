@@ -54,3 +54,27 @@ HDFS为Hadoop默认系统。HDFS的守护程序通过该属性来确定HDFSnamen
 第二项：dfs.replication,我们设为1，这样一来，HDFS就不回按默认设置将文件系统块复本设为3。在单独一个datanode上运行时，HDFS无法
 将块复制到3个datanode上，所以会持续给出块复本不足的警告。设置这个属性后，问题就会解决。  
 ### 文件系统的基本操作
+*从本地文件系统将一个文件复制到HDFS:*  
+`
+% hadoop fs -copyFromLocal input/docs/quangle.txt \ hdfs://loacalhost/user/tom/quangle.txt
+`  
+当然也可以简化命令格式以省略主机的URI并使用默认设置，省略hdfs://localhost,因为该项已在core-site.xml中指定
+*也可以用相对路径home为上述的/user/tom/*  
+`
+% hadoop fs -copyFromLocal input/docs/quangle.txt quangle.txt
+`  
+*把文件复制回本地文件系统*
+```
+% hadoop fs -copyToLocal quangle.txt quangle.copy.txt
+% md5 input/docs/quangle.txt quangle.copy.txt
+```
+若MD5键值相同，表明这个文件在HDFS之旅中得以幸存并保存完整
+```
+% hadoop fs -mkdir books
+% hadoop fs -ls
+Fond2 items
+drw-xr-x - tom supergroup 0 2014-10-04 13:22 books
+-rw-r--r-- 1 tom supergroup 119 20144-10-04 13:21 quangle.txt
+```
+第1列显示的是文件模式。第2列是文件的备份数。第3、4列是显示文件的所属用户和组别。第5列是文件的大小，以字节为单位,目录
+为0.第6、7是文件的最后修改日期与时间。第8列是文件或目录的名称。  
