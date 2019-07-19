@@ -78,3 +78,9 @@ drw-xr-x - tom supergroup 0 2014-10-04 13:22 books
 ```
 第1列显示的是文件模式。第2列是文件的备份数。第3、4列是显示文件的所属用户和组别。第5列是文件的大小，以字节为单位,目录
 为0.第6、7是文件的最后修改日期与时间。第8列是文件或目录的名称。  
+## 数据流
+### 剖析文件读取
+对于HDFS来说，对象是DistributedFileSystem的一个实例。DistributedFileSystem通过使用远程调用（RPC）来调用namenode,
+以确定文件起始块的位置。对于每个块，namenode返回存有该块副本的datanode地址。此外，datanode根据它们与客户端的距离来
+排序（根据集群的网络拓扑）。如果该客户端本身就是一个datanode(比如，在一个MapReduce任务中)，那么该客户端将会从保存有
+相应数据块复本的本地datanode读取数据。
