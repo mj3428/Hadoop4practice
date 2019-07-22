@@ -84,3 +84,11 @@ drw-xr-x - tom supergroup 0 2014-10-04 13:22 books
 以确定文件起始块的位置。对于每个块，namenode返回存有该块副本的datanode地址。此外，datanode根据它们与客户端的距离来
 排序（根据集群的网络拓扑）。如果该客户端本身就是一个datanode(比如，在一个MapReduce任务中)，那么该客户端将会从保存有
 相应数据块复本的本地datanode读取数据。
+### 一致模型
+HDFS提供了一种强行将所有缓存刷新到datanode中的手段，即对FSDataOutputStream调用hflush()方法。当hflush()方法后返回成功后，
+对所有新的reader而言，HDFS能保证文件中到目前为止写入的数据均到达所有datanode的写入管道并且对所有新的reader均可见：
+```
+Path p = new Path("p");
+FSDataOutputStream Out = fs.create(p);
+out.write("content".getBytes("UTF-8"));
+out.hflush
