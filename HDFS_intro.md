@@ -101,11 +101,12 @@ Hadoop自带一个有用程序distcp，该程序可以并行从Hadoop文件系�
 ```
 # 将文件复制到另1个文件中
 % hadoop distcp file1 file2
+
 # 将目录文件全部复制到另1个目录
 % hadoop distcp dir1 dir2
 且形成目录结构dir2/dir1
+
 # 若命令修改要同步到dir2
 % hadoop distcp -update dir1 dir2
-
 ```
 
