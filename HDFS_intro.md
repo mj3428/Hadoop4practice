@@ -91,4 +91,21 @@ HDFS提供了一种强行将所有缓存刷新到datanode中的手段，即对FS
 Path p = new Path("p");
 FSDataOutputStream Out = fs.create(p);
 out.write("content".getBytes("UTF-8"));
-out.hflush
+out.hflush();
+assertThat(fs.getFileStatus(p).getLen(), is(((long) "content".length())));
+```
+hflush()不能保证datanode已经将数据写到磁盘上，仅确保数据在datanode的内存中（因此，如果数据中心断电，数据会丢失）
+为确保数据写入到磁盘上，以用hsync()替代。  
+## 通过distcp并行复制
+Hadoop自带一个有用程序distcp，该程序可以并行从Hadoop文件系统中复制大量数据，也可以将大量数据复制到Hadoop中。
+```
+# 将文件复制到另1个文件中
+% hadoop distcp file1 file2
+# 将目录文件全部复制到另1个目录
+% hadoop distcp dir1 dir2
+且形成目录结构dir2/dir1
+# 若命令修改要同步到dir2
+% hadoop distcp -update dir1 dir2
+
+```
+
