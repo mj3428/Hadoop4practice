@@ -109,4 +109,20 @@ Hadoop自带一个有用程序distcp，该程序可以并行从Hadoop文件系�
 # 若命令修改要同步到dir2
 % hadoop distcp -update dir1 dir2
 ```
+*以下命令在第二个集群上为第一个集群/foo目录创建一个备份*
+```
+% haddop distcp -update -delete -p hdfs://namenode1/foo hdfs://namenode2/foo
+```
+-delete：是的distcp可以删除目标路径中任意没在原路径中出现的文件或目录  
+-P：意味着文件状态属性如权限、块大小和复本数被保留  
+如果两个集群运行的是HDFS的不兼容版本，你可以将webhdfs协议用于它们之间的distcp:
+```
+% hadoop distcp webhdfs://namenode1:50070/foo webhdfs://namenode2:50070/foo
+```
+## 保持HDFS集群的均衡
+向HDFS复制数据时，考虑集群的均衡性是相当重要的。当文件块在集群中均匀分布式， HDFS能达到最佳工作状态，因此你想确保distcp不会
+破坏这点。例如如果将-m指定为1，即由一个map来执行复制作业，它的意思是不考虑速度变慢和为充分利用集群资源每个块的第一个复本
+将存储到运行map的节点上（知道磁盘被填满）。第二个和第三个复本将分散在集群中，但这一个节点是不均衡的。将map的数量设定为多余
+集群中节点的数量，可以避免这个问题。鉴于此，最好首先使用默认的每个节点20个map来运行distcp命令。  
+另外，可以用均衡器(balancer)工具，进而改善集群中块分布的均匀程度。
 
