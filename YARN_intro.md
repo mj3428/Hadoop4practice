@@ -7,4 +7,9 @@ YARN是Hadoop的集群资源管理系统。
 | 存储 | HDFSandHBase | HDFSandHBase | HDFSandHBase | HDFSandHBase |
 ## 剖析YARN应用运行机制
 ![YARN](YARN.png)
- 
+步骤1: 要求他运行一个application master进程  
+步骤2: 资源管理器找到一个能够在容器中启动application master的节点管理器  
+步骤3: 可能向资源管理器请求更多的容器  
+步骤4: 用于运行一个分布式计算。之后就是MapReduceYARN应用所做的事情。  
+大多数重要的YARN应用使用某种的远程通信机制（例如Hadoop的RPC层）来向客户端传递状态更新和返回结果，但是这些通信机制都是
+专属于各应用层。  
